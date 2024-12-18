@@ -1,0 +1,15 @@
+title: TextClassificationSingleLabel
+description: >
+  Import and export format for importing/exporting text together with
+  single-label classification annotations. Can be used in
+  Dataset.import_schema_uri field.
+type: object
+required:
+- content
+properties:
+  content:
+  - type: object
+    properties:
+      question:
+        type: string
+        description: Full length text content. Up to 10MB in size.

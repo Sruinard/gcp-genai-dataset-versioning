@@ -1,0 +1,59 @@
+title: ImageBoundingBox
+description: >
+  Import and export format for importing/exporting images together with bounding
+  box annotations. Can be used in Dataset.import_schema_uri field.
+type: object
+required:
+- imageGcsUri
+properties:
+  imageGcsUri:
+    type: string
+    description: >
+      A Google Cloud Storage URI pointing to an image. Up to 30MB in size.
+      Supported file mime types: `image/jpeg`, `image/gif`, `image/png`,
+      `image/webp`, `image/bmp`, `image/tiff`, `image/vnd.microsoft.icon`.
+  boundingBoxAnnotations:
+    type: array
+    description: Multiple bounding box Annotations on the image.
+    items:
+      type: object
+      description: >
+        Bounding box anntoation. `xMin`, `xMax`, `yMin`, and `yMax` are relative
+        to the image size, and the point 0,0 is in the top left of the image.
+      properties:
+        displayName:
+          type: string
+          description: >
+            It will be imported as/exported from AnnotationSpec's display name,
+            i.e. the name of the label/class.
+        xMin:
+          description: The leftmost coordinate of the bounding box.
+          type: number
+          format: double
+        xMax:
+          description: The rightmost coordinate of the bounding box.
+          type: number
+          format: double
+        yMin:
+          description: The topmost coordinate of the bounding box.
+          type: number
+          format: double
+        yMax:
+          description: The bottommost coordinate of the bounding box.
+          type: number
+          format: double
+        annotationResourceLabels:
+          description: Resource labels on the Annotation.
+          type: object
+          additionalProperties:
+            type: string
+  dataItemResourceLabels:
+    description: >
+      Resource labels on the DataItem. Overrides values set in
+      ImportDataConfig at import time. Can set a user-defined label
+      or the predefined `aiplatform.googleapis.com/ml_use` label, which is
+      used to determine the data split and can be set to `training`, `test`,
+      and `validation`.
+    type: object
+    additionalProperties:
+      type: string

@@ -1,0 +1,19 @@
+title: Image
+type: object
+description: >
+  The metadata of Datasets that contain Image DataItems. Can be used in
+  Dataset.metadata_schema_uri field.
+properties:
+  dataItemSchemaUri:
+    type: string
+    readOnly: true
+    description: >
+      Points to a YAML file stored on Google Cloud Storage describing
+      payload of the Image DataItems that belong to this Dataset.
+      The gs://google-cloud-aiplatform/schema/dataset/annotation/dataitem/
+      image file(s) can be used here.
+  gcsBucket:
+    type: string
+    readOnly: true
+    description: >
+      Google Cloud Storage Bucket name that contains the blob data of this Dataset.

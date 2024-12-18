@@ -1,0 +1,77 @@
+title: VideoObjectTracking
+version: 1.0.0
+description: >
+  Import and export format for importing/exporting videos together with
+  temporal bounding box annotations. Can be used in Dataset.import_schema_uri
+  field.
+type: object
+required:
+- videoGcsUri
+properties:
+  videoGcsUri:
+    type: string
+    description: >
+      A Google Cloud Storage URI pointing to a video. Up to 50 GB in size and
+      up to 3 hours in duration. Supported file mime types: `video/mp4`,
+      `video/avi`, `video/quicktime`.
+  temporalBoundingBoxAnnotations:
+    type: array
+    description: >
+      Multiple temporal bounding box annotations. Each on a frame of the video.
+    items:
+      type: object
+      description: >
+        Temporal bounding box annotation on a video. `xMin`, `xMax`, `yMin`, and
+        `yMax` are relative to the video frame size, and the point 0,0 is in the
+        top left of the frame.
+      properties:
+        displayName:
+          type: string
+          description: >
+            It will be imported as/exported from AnnotationSpec's display name,
+            i.e., the name of the label/class.
+        xMin:
+          description: The leftmost coordinate of the bounding box.
+          type: number
+          format: double
+        xMax:
+          description: The rightmost coordinate of the bounding box.
+          type: number
+          format: double
+        yMin:
+          description: The topmost coordinate of the bounding box.
+          type: number
+          format: double
+        yMax:
+          description: The bottommost coordinate of the bounding box.
+          type: number
+          format: double
+        timeOffset:
+          type: string
+          description: >
+            A time (frame) of a video in which the object has been detected.
+            Expressed as a number of seconds as measured from the
+            start of the video, with fractions up to a microsecond precision,
+            and with "s" appended at the end.
+        instanceId:
+          type: number
+          format: integer
+          description: >
+            The instance of the object, expressed as a positive integer. Used to
+            tell apart objects of the same type when multiple are present in a
+            single video.
+        annotationResourceLabels:
+          description: Resource labels on the Annotation.
+          type: object
+          additionalProperties:
+            type: string
+  dataItemResourceLabels:
+    description: >
+      Resource labels on the DataItem. Overrides values set in
+      ImportDataConfig at import time. Can set a user-defined label
+      or the predefined `aiplatform.googleapis.com/ml_use` label, which is
+      used to determine the data split and can be set to `training`, `test`,
+      and `validation`.
+    type: object
+    additionalProperties:
+      type: string

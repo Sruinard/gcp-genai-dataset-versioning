@@ -1,0 +1,12 @@
+title: question_answering
+type: object
+description: >
+  The metadata of question_answering Datasets. Can be used in Dataset.import_schema_uri
+  field.
+properties:
+  question:
+    type: string
+    description: The question field in the JSONL dataset.
+  answer:
+    type: string
+    description: The answer field in the JSONL dataset.

@@ -1,0 +1,75 @@
+title: TextExtraction
+description: >
+  Import and export format for importing/exporting text together with text
+  segment annotations. Can be used in Dataset.import_schema_uri field.
+type: object
+required:
+- content
+properties:
+  content:
+    oneOf:
+    - type: object
+      properties:
+        type:
+          type: string
+          enum: [textContent]
+        textContent:
+          type: string
+          description: Full length text content. Up to 10MB in size.
+    - type: object
+      properties:
+        type:
+          type: string
+          enum: [textGcsUri]
+        textGcsUri:
+          type: string
+          description: >
+            A Google Cloud Storage URI pointing to a text file. Up to 10MB in
+            size. Supported file mime types: `text/plain`.
+    discriminator:
+      propertyName: type
+  languageCode:
+    type: string
+    description: Optional language code of the text.
+    default: en-US
+  textSegmentAnnotations:
+    type: array
+    description: Multiple text segment Annotations on the text.
+    items:
+      type: object
+      description: Text segment annotation.
+      properties:
+        displayName:
+          type: string
+          description: >
+            It will be imported as/exported from AnnotationSpec's display name,
+            i.e. the name of the label/class.
+        startOffset:
+          type: number
+          format: long
+          description: >
+            Zero-based character index of the first character of the text
+            segment (counting characters from the beginning of the text).
+        endOffset:
+          type: number
+          format: long
+          description: >
+            Zero-based character index of the first character past the end of
+            the text segment (counting character from the beginning of the
+            text). The character at the endOffset is NOT included in the text
+            segment.
+        annotationResourceLabels:
+          description: Resource labels on the Annotation.
+          type: object
+          additionalProperties:
+            type: string
+  dataItemResourceLabels:
+    description: >
+      Resource labels on the DataItem. Overrides values set in
+      ImportDataConfig at import time. Can set a user-defined label
+      or the predefined `aiplatform.googleapis.com/ml_use` label, which is
+      used to determine the data split and can be set to `training`, `test`,
+      and `validation`.
+    type: object
+    additionalProperties:
+      type: string

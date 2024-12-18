@@ -1,0 +1,44 @@
+title: TimeSeries
+type: object
+description: >
+  The metadata of time series Datasets. Can be used in
+  Dataset.metadata_schema_uri field.
+properties:
+  inputConfig:
+    description: >
+      The time series Dataset's data source. The Dataset doesn't store the data
+      directly, but only pointer(s) to its data.
+    oneOf:
+    - type: object
+      properties:
+        type:
+          type: string
+          enum: [gcs_source]
+        gcs_uri:
+          type: string
+          description: >
+            Cloud Storage URI of one or more files. Only CSV files are supported.
+            The first line of the CSV file is used as the header.
+            If there are multiple files, the header is the first line of
+            the lexicographically first file, the other files must either
+            contain the exact same header or omit the header.
+    - type: object
+      properties:
+        type:
+          type: string
+          enum: [bigquery_source]
+        bigquery_uri:
+          type: string
+          description: The URI of a BigQuery table.
+    discriminator:
+      propertyName: type
+  timeSeriesIdentifierColumn:
+    type: string
+    description: >
+      The column name of the time series identifier column that identifies the
+      time series.
+  timeColumn:
+    type: string
+    description: >
+      The column name of the time column that identifies time order in the time
+      series.

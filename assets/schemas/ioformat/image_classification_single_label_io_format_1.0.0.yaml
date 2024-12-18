@@ -1,0 +1,39 @@
+title: ImageClassificationSingleLabel
+description: >
+  Import and export format for importing/exporting images together with
+  single-label classification annotation. Can be used in
+  Dataset.import_schema_uri field.
+type: object
+required:
+- imageGcsUri
+properties:
+  imageGcsUri:
+    type: string
+    description: >
+      A Google Cloud Storage URI pointing to an image. Up to 30MB in size.
+      Supported file mime types: `image/jpeg`, `image/gif`, `image/png`,
+      `image/webp`, `image/bmp`, `image/tiff`, `image/vnd.microsoft.icon`.
+  classificationAnnotation:
+    type: object
+    description: Single classification Annotation on the image.
+    properties:
+      displayName:
+        type: string
+        description: >
+          It will be imported as/exported from AnnotationSpec's display name,
+          i.e. the name of the label/class.
+      annotationResourceLabels:
+        description: Resource labels on the Annotation.
+        type: object
+        additionalProperties:
+          type: string
+  dataItemResourceLabels:
+    description: >
+      Resource labels on the DataItem. Overrides values set in
+      ImportDataConfig at import time. Can set a user-defined label
+      or the predefined `aiplatform.googleapis.com/ml_use` label, which is
+      used to determine the data split and can be set to `training`, `test`,
+      and `validation`.
+    type: object
+    additionalProperties:
+      type: string

@@ -1,0 +1,140 @@
+title: ImageSegmentation
+description: >
+  Import and export format for importing/exporting images together with
+  segmentation annotation.
+type: object
+required:
+- imageGcsUri
+properties:
+imageGcsUri:
+  type: string
+  description: >
+    A Google Cloud Storage URI points to an image. Up to 30MB in size.
+    Supported file mime type: `image/png`.
+maskAnnotation:
+  type: object
+  description: >
+    Annotation that represents a mask. Only one of maskAnnotation, polygonAnnotations
+    and polylineAnnotations can be present at the same time.
+  properties:
+    categoryMaskGcsUri:
+      type: string
+      description: >
+        Google Cloud Storage URI points to the mask image. Up to 30MB in size.
+        The image must be in PNG format. It must has the same size as the image
+        DataItem. Each pixel in the image mask represents the AnnotationSpec
+        which the pixel in the image DataItem belong to. Each color is mapped to
+        one AnnotationSpec based on annotation_spec_colors.
+    annotationSpecColors:
+      type: array
+      description: >
+        The mapping between color and AnnotationSpec for this Annotation.
+      items:
+        type: object
+        properties:
+          color:
+            type: object
+            description: The color of the AnnotationSpec in a segmentation mask.
+            required:
+            - red
+            - blue
+            - green
+            properties:
+              red:
+                type: number
+                minimum: 0.0
+                maximum: 1.0
+                format: float
+              blue:
+                type: number
+                minimum: 0.0
+                maximum: 1.0
+                format: float
+              green:
+                type: number
+                minimum: 0.0
+                maximum: 1.0
+                format: float
+          displayName:
+            type: string
+            description: >
+              It will be imported as/exported from AnnotationSpec's display name,
+              i.e. the name of the label/class.
+    annotationResourceLabels:
+      description: Resource labels on the Annotation.
+      type: object
+      additionalProperties:
+        type: string
+polygonAnnotations:
+  type: array
+  description: >
+    Multiple polygon annotations on the image. Only one of maskAnnotation,
+    polygonAnnotations and polylineAnnotations can be present at the same time.
+  items:
+    type: object
+    properties:
+      displayName:
+        type: string
+        description: >
+          It will be imported as/exported from AnnotationSpec's display name,
+          i.e. the name of the label/class.
+      vertexes:
+        type: array
+        description: >
+          The vertexes are connected one by one and the last vertex is connected
+          to the first one to represent a polygon.
+        items:
+          type: object
+          properties:
+            x:
+              type: double
+              description: x coordinate
+            y:
+              type: double
+              description: y coordinate
+      annotationResourceLabels:
+        description: Resource labels on the Annotation.
+        type: object
+        additionalProperties:
+          type: string
+polylineAnnotation:
+  type: array
+  description: >
+    Multiple polyline annotations on the image. Only one of maskAnnotation,
+    polygonAnnotations and polylineAnnotations can be present at the same time.
+  items:
+    type: object
+    properties:
+      displayName:
+        type: string
+        description: >
+          It will be imported as/exported from AnnotationSpec's display name,
+          i.e. the name of the label/class.
+      vertexes:
+        type: array
+        description: >
+          The vertexes are connected one by one.
+        items:
+          type: object
+          properties:
+            x:
+              type: double
+              description: x coordinate
+            y:
+              type: double
+              description: y coordinate
+      annotationResourceLabels:
+        description: Resource labels on the Annotation.
+        type: object
+        additionalProperties:
+          type: string
+dataItemResourceLabels:
+  description: >
+    Resource labels on the DataItem. Overrides values set in
+    ImportDataConfig at import time. Can set a user-defined label
+    or the predefined `aiplatform.googleapis.com/ml_use` label, which is
+    used to determine the data split and can be set to `training`, `test`,
+    and `validation`.
+  type: object
+  additionalProperties:
+    type: string

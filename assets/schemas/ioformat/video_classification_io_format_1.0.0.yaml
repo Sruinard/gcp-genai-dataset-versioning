@@ -1,0 +1,57 @@
+title: VideoClassification
+description: >
+  Import and export format for importing/exporting videos together with
+  classification annotations with time segment. Can be used in
+  Dataset.import_schema_uri field.
+type: object
+required:
+- videoGcsUri
+properties:
+  videoGcsUri:
+    type: string
+    description: >
+      A Google Cloud Storage URI pointing to a video. Up to 50 GB in size and
+      up to 3 hours in duration. Supported file mime types: `video/mp4`,
+      `video/avi`, `video/quicktime`.
+  timeSegmentAnnotations:
+    type: array
+    description: >
+      Multiple classification annotations. Each on a time segment of the video.
+    items:
+      type: object
+      description: Annotation with a time segment on media (e.g. video).
+      properties:
+        displayName:
+          type: string
+          description: >
+            It will be imported as/exported from AnnotationSpec's display name.
+        startTime:
+          type: string
+          description: >
+            The start of the time segment. Expressed as a number of seconds as
+            measured from the start of the video, with "s" appended at the end.
+            Fractions are allowed, up to a microsecond precision.
+          default: 0s
+        endTime:
+          type: string
+          description: >
+            The end of the time segment. Expressed as a number of seconds as
+            measured from the start of the video, with "s" appended at the end.
+            Fractions are allowed, up to a microsecond precision, and "Infinity"
+            is allowed, which corresponds to the end of the video.
+          default: Infinity
+        annotationResourceLabels:
+          description: Resource labels on the Annotation.
+          type: object
+          additionalProperties:
+            type: string
+  dataItemResourceLabels:
+    description: >
+      Resource labels on the DataItem. Overrides values set in
+      ImportDataConfig at import time. Can set a user-defined label
+      or the predefined `aiplatform.googleapis.com/ml_use` label, which is
+      used to determine the data split and can be set to `training`, `test`,
+      and `validation`.
+    type: object
+    additionalProperties:
+      type: string

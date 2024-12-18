@@ -1,0 +1,68 @@
+title: TextSentiment
+description: >
+  Import and export format for importing/exporting text together with sentiment
+  annotations. Can be used in Dataset.import_schema_uri field.
+type: object
+required:
+- content
+properties:
+  content:
+    oneOf:
+    - type: object
+      properties:
+        type:
+          type: string
+          enum: [textContent]
+        textContent:
+          type: string
+          description: Full length text content. Up to 10MB in size.
+    - type: object
+      properties:
+        type:
+          type: string
+          enum: [textGcsUri]
+        textGcsUri:
+          type: string
+          description: >
+            A Google Cloud Storage URI pointing to a text file. Up to 10MB in
+            size. Supported file mime types: `text/plain`.
+    discriminator:
+      propertyName: type
+  languageCode:
+    type: string
+    description: Optional language code of the text.
+    default: en-US
+  sentimentAnnotation:
+    type: object
+    description: Single sentiment Annotation on the text.
+    properties:
+      sentiment:
+        type: number
+        format: integer
+        description: >
+          A sentiment is expressed as an integer ordinal, where higher value
+          means a more positive sentiment. The range of sentiments that will be used
+          is between 0 and sentimentMax (inclusive on both ends).
+      sentimentMax:
+        type: number
+        format: integer
+        minimum: 0
+        maximum: 10
+        description: >
+          For AutoML model training, only Annotations with the same
+          sentiment_max could be used for training.
+      annotationResourceLabels:
+        description: Resource labels on the Annotation.
+        type: object
+        additionalProperties:
+          type: string
+  dataItemResourceLabels:
+    description: >
+      Resource labels on the DataItem. Overrides values set in
+      ImportDataConfig at import time. Can set a user-defined label
+      or the predefined `aiplatform.googleapis.com/ml_use` label, which is
+      used to determine the data split and can be set to `training`, `test`,
+      and `validation`.
+    type: object
+    additionalProperties:
+      type: string
